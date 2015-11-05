@@ -15,10 +15,10 @@ var attractions = ko.observableArray ([
         }
     },
     {
-        name: "Rockfeller Center",
+        name: "Madison Square Garden",
         position: {
-            lat: 40.7587402,
-            lng: -73.9808676
+            lat: 40.7505045,
+            lng: -73.9956327
         }
     },
     {
@@ -65,7 +65,9 @@ function initialize() {
     };
 
     map = new google.maps.Map(mapCanvas, mapOptions);
-    infowindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow({
+        maxWidth: 200
+    });
 
     for (var i = 0; i < attractions().length; i++) {
         createMarker(attractions()[i].position, attractions()[i].name);
@@ -124,8 +126,8 @@ var getWikiRecourse = function(markerObject, markerTitle) {
         success: function (response) {
             var articleStr = response[0];
             var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-            content = url;
-            infowindow.setContent('<h4>' + articleStr + '</h4>' + '<a href="' + content + '" target="_blank">' + 'Wikipedia Link to ' + articleStr + '</a>');
+            content = response[2][0];
+            infowindow.setContent('<h4>' + articleStr + '</h4>' + content + '<p><a href="' + url + '" target="_blank">' + 'More about ' + articleStr + '</a></p>');
             infowindow.open(map, markerObject);
             clearTimeout(wikiRequestTimeout);
         }
